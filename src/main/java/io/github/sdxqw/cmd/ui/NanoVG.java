@@ -1,20 +1,10 @@
 package io.github.sdxqw.cmd.ui;
 
 import io.github.sdxqw.cmd.client.Window;
-import lombok.SneakyThrows;
 import org.lwjgl.nanovg.NVGColor;
 import org.lwjgl.nanovg.NVGPaint;
 
-import java.nio.ByteBuffer;
-import java.nio.channels.AsynchronousFileChannel;
-import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.nio.file.StandardOpenOption;
-import java.util.Objects;
-import java.util.concurrent.Future;
-
 import static org.lwjgl.nanovg.NanoVG.*;
-import static org.lwjgl.stb.STBImage.stbi_failure_reason;
 
 /**
  * The NanoVG class provides static utility methods for rendering graphics using the NanoVG library.
@@ -52,56 +42,21 @@ public class NanoVG {
     }
 
     /**
-     * Renders an image from a file and returns the image handle.
+     * Draws an image onto the screen using NanoVG.
      *
-     * @param image  The filename of the image.
-     * @param x      The x-coordinate of the image's top-left corner.
-     * @param y      The y-coordinate of the image's top-left corner.
-     * @param width  The width of the image.
-     * @param height The height of the image.
-     * @return The image handle.
-     * @throws Exception If there is an error rendering the image.
+     * @param image  the Image to be drawn
+     * @param x      the x coordinate of the top-left corner of the image
+     * @param y      the y coordinate of the top-left corner of the image
+     * @param width  the width of the image to be drawn
+     * @param height the height of the image to be drawn
+     * @param alpha  the alpha value of the image (between 0 and 255)
      */
-    @SneakyThrows
-    public static int renderImage(String image, float x, float y, float width, float height) {
-        Path imagePath = Paths.get(Objects.requireNonNull(NanoVG.class.getResource(image)).toURI());
-        int imageHandle;
-
-        try (AsynchronousFileChannel fileChannel = AsynchronousFileChannel.open(imagePath, StandardOpenOption.READ)) {
-            ByteBuffer imageBuffer = ByteBuffer.allocateDirect((int) fileChannel.size());
-
-            Future<Integer> readResult = fileChannel.read(imageBuffer, 0);
-
-            while (true) {
-                if (readResult.isDone()) break;
-            }
-
-            readResult.get(); // Check for errors during the read operation
-            imageBuffer.flip();
-
-            imageHandle = nvgCreateImageMem(Window.nvg, NVG_IMAGE_GENERATE_MIPMAPS, imageBuffer);
-
-            if (imageHandle == 0) {
-                throw new RuntimeException("Failed to load image: " + stbi_failure_reason());
-            }
-
-            nvgBeginPath(Window.nvg);
-            NVGPaint paint = nvgImagePattern(Window.nvg, x, y, width, height, 0.0f, imageHandle, 1.0f, NVGPaint.create());
-            nvgRect(Window.nvg, x, y, width, height);
-            nvgFillPaint(Window.nvg, paint);
-            nvgFill(Window.nvg);
-        }
-
-        return imageHandle;
-    }
-
-    /**
-     * Deletes an image from memory.
-     *
-     * @param imageHandle The image handle.
-     */
-    public static void cleanUpImage(int imageHandle) {
-        nvgDeleteImage(Window.nvg, imageHandle);
+    public static void drawImage(Image image, float x, float y, float width, float height, int alpha) {
+        nvgBeginPath(Window.nvg);
+        NVGPaint paint = nvgImagePattern(Window.nvg, x, y, width, height, 0.0F, image.getImageId(), alpha / 255.0F, NVGPaint.create());
+        nvgRect(Window.nvg, x, y, width, height);
+        nvgFillPaint(Window.nvg, paint);
+        nvgFill(Window.nvg);
     }
 }
 

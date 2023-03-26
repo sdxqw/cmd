@@ -4,7 +4,9 @@ import io.github.sdxqw.cmd.client.CmdClient;
 import io.github.sdxqw.cmd.client.Window;
 import io.github.sdxqw.cmd.font.FontManager;
 import io.github.sdxqw.cmd.ui.Button;
+import io.github.sdxqw.cmd.ui.Image;
 import io.github.sdxqw.cmd.ui.NanoVG;
+import io.github.sdxqw.logger.Logger;
 import lombok.Getter;
 
 import java.util.ArrayList;
@@ -21,8 +23,8 @@ public class CmdCore implements CmdClient {
 
     private final List<Button> buttons;
     private final FPSCounter fps;
+    Image image;
 
-    int image = 0;
 
     private CmdCore() {
         fps = new FPSCounter();
@@ -41,7 +43,9 @@ public class CmdCore implements CmdClient {
      * Renders a single frame of the game's UI, including buttons and FPS counter.
      */
     public void renderFrame() {
-        //image = NanoVG.renderImage("/image/ig.png", 90, 90, 100, 100);
+        image = new Image("ig");
+
+        NanoVG.drawImage(image, 10, 10, 20, 20, 255);
 
         buttons.forEach(Button::render);
 
@@ -62,6 +66,6 @@ public class CmdCore implements CmdClient {
     public void cleanup() {
         buttons.clear();
         fps.clear();
-        NanoVG.cleanUpImage(image);
+        image.cleanup();
     }
 }

@@ -1,16 +1,13 @@
 package io.github.sdxqw.cmd.font;
 
 import io.github.sdxqw.cmd.client.Window;
+import io.github.sdxqw.cmd.utils.Utils;
 import lombok.SneakyThrows;
 import org.lwjgl.nanovg.NVGColor;
 
 import java.nio.ByteBuffer;
 import java.nio.FloatBuffer;
-import java.nio.channels.FileChannel;
-import java.nio.file.Files;
-import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.nio.file.StandardOpenOption;
 import java.util.Objects;
 
 import static org.lwjgl.nanovg.NanoVG.*;
@@ -22,30 +19,25 @@ public class Font {
 
     /**
      * Initializes a font with the given name and font file.
-     * @param name the name of the font
+     *
+     * @param name     the name of the font
      * @param fontName the name of the font file
      */
     @SneakyThrows
     public void init(String name, String fontName) {
-        Path fontPath = Paths.get(Objects.requireNonNull(getClass().getResource("/fonts/" + fontName + ".ttf")).toURI());
-        try (FileChannel fc = FileChannel.open(fontPath, StandardOpenOption.READ)) {
-            ByteBuffer fontBuffer = ByteBuffer.allocateDirect((int) fc.size());
-            fc.read(fontBuffer);
-            fontBuffer.flip();
-            nvgCreateFontMem(Window.nvg, name, fontBuffer, 0);
-        } finally {
-            Files.delete(fontPath);
-        }
+        ByteBuffer fontBuffer = Utils.readFile(Paths.get(Objects.requireNonNull(Utils.class.getResource("/fonts/" + fontName + ".ttf")).toURI()));
+        nvgCreateFontMem(Window.nvg, name, fontBuffer, 0);
     }
 
     /**
      * Draws the specified text with the given font, size, and color at the specified position.
-     * @param text the text to draw
-     * @param x the x-coordinate of the starting position
-     * @param y the y-coordinate of the starting position
-     * @param font the name of the font to use
+     *
+     * @param text     the text to draw
+     * @param x        the x-coordinate of the starting position
+     * @param y        the y-coordinate of the starting position
+     * @param font     the name of the font to use
      * @param fontSize the size of the font to use
-     * @param color the color of the text to draw
+     * @param color    the color of the text to draw
      */
     public void drawText(String text, float x, float y, String font, float fontSize, NVGColor color) {
         nvgFontFace(Window.nvg, font);
@@ -56,8 +48,9 @@ public class Font {
 
     /**
      * Returns the width of the specified text when drawn with the given font and size.
-     * @param text the text to measure
-     * @param font the name of the font to use
+     *
+     * @param text     the text to measure
+     * @param font     the name of the font to use
      * @param fontSize the size of the font to use
      * @return the width of the text in pixels
      */
