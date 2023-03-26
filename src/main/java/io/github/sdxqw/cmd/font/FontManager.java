@@ -42,4 +42,14 @@ public class FontManager {
     public static float measureTextWidth(String text, String name, float fontSize) {
         return font.measureTextWidth(text, name, fontSize);
     }
+
+    /**
+     * Returns the height of the specified text when drawn with the given font and size.
+     *
+     * @param name     the name of the font to use
+     * @return the height of the font in pixels
+     */
+    public static float getTextHeight(String name) {
+        return font.getTextHeight(name);
+    }
 }

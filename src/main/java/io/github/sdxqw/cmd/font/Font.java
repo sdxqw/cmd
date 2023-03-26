@@ -3,6 +3,7 @@ package io.github.sdxqw.cmd.font;
 import io.github.sdxqw.cmd.client.Window;
 import io.github.sdxqw.cmd.utils.Utils;
 import lombok.SneakyThrows;
+import org.lwjgl.BufferUtils;
 import org.lwjgl.nanovg.NVGColor;
 
 import java.nio.ByteBuffer;
@@ -57,7 +58,22 @@ public class Font {
     public float measureTextWidth(String text, String font, float fontSize) {
         nvgFontFace(Window.nvg, font);
         nvgFontSize(Window.nvg, fontSize);
+
         return nvgTextBounds(Window.nvg, 0f, 0f, text, (FloatBuffer) null);
     }
+
+    /**
+     * Returns the height of the specified text when drawn with the given font and size.
+     *
+     * @param font the name of the font to use
+     * @return the height of the font in pixels
+     */
+    public float getTextHeight(String font) {
+        nvgFontFace(Window.nvg, font);
+        FloatBuffer lineh = BufferUtils.createFloatBuffer(1);
+        nvgTextMetrics(Window.nvg, null, null, lineh);
+        return lineh.get(0);
+    }
+
 
 }

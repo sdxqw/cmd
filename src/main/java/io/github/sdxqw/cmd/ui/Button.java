@@ -2,6 +2,7 @@ package io.github.sdxqw.cmd.ui;
 
 import io.github.sdxqw.cmd.client.Window;
 import io.github.sdxqw.cmd.font.FontManager;
+import io.github.sdxqw.cmd.utils.NanoVG;
 import org.lwjgl.glfw.GLFW;
 
 /**
@@ -42,12 +43,16 @@ public class Button {
      * Renders the button on the screen.
      */
     public void render() {
-        float fontHeight = 20.0f; // Change as needed
+        float fontHeight = FontManager.getTextHeight("roboto");
         float labelWidth = FontManager.measureTextWidth(label, FontManager.ROBOTO, fontHeight);
-        float labelX = x + width / 2 - labelWidth / 2;
-        float labelY = Window.height - y - height / 2 + fontHeight / 2;
+        float centerX = x + width / 2;
+        float centerY = Window.height - y - height / 2;
+        float labelX = centerX - labelWidth / 2;
+        float labelY = centerY + fontHeight / 2;
 
-        NanoVG.drawRect(x, Window.height - y - height, width, height, NanoVG.color(0.0f, 0.0f, 0.0f, hovered ? 0.6f : 0.4f));
+        NanoVG.drawRoundedRectBorder(x, Window.height - y - height, width, height, 12, 3, NanoVG.color(0.0f, 0.0f, 0.0f, hovered ? 0.6f : 0.4f));
+
+        NanoVG.drawRoundedRect(x, Window.height - y - height, width, height, 12, NanoVG.color(0.0f, 0.0f, 0.0f, hovered ? 0.6f : 0.4f));
         FontManager.drawRobotoText(label, labelX, labelY, fontHeight, NanoVG.color(1.0f, 1.0f, 1.0f, 1.0f));
     }
 
