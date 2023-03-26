@@ -20,6 +20,6 @@ Thank you for considering CMD for your command line needs. We hope you enjoy usi
 
 ## Images
 
-DEMO - 1.0
+DEMO - 0.1-ALPHA
 
 ![image](https://user-images.githubusercontent.com/94248011/227774612-cc5a75a7-00c8-41cc-8ee3-c708c197b1f9.png)
