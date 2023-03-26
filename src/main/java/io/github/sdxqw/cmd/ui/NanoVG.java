@@ -16,12 +16,34 @@ import java.util.concurrent.Future;
 import static org.lwjgl.nanovg.NanoVG.*;
 import static org.lwjgl.stb.STBImage.stbi_failure_reason;
 
+/**
+ * The NanoVG class provides static utility methods for rendering graphics using the NanoVG library.
+ */
 public class NanoVG {
 
+
+    /**
+     * Returns an NVGColor object with the specified RGBA values.
+     *
+     * @param r The red value, ranging from 0.0 to 1.0.
+     * @param g The green value, ranging from 0.0 to 1.0.
+     * @param b The blue value, ranging from 0.0 to 1.0.
+     * @param a The alpha value, ranging from 0.0 to 1.0.
+     * @return The NVGColor object with the specified RGBA values.
+     */
     public static NVGColor color(float r, float g, float b, float a) {
         return NVGColor.calloc().a(a).r(r).g(g).b(b);
     }
 
+    /**
+     * Draws a rectangle with the specified position, size, and color.
+     *
+     * @param x      The x-coordinate of the rectangle's top-left corner.
+     * @param y      The y-coordinate of the rectangle's top-left corner.
+     * @param width  The width of the rectangle.
+     * @param height The height of the rectangle.
+     * @param color  The color to fill the rectangle with.
+     */
     public static void drawRect(float x, float y, float width, float height, NVGColor color) {
         nvgBeginPath(Window.nvg);
         nvgRect(Window.nvg, x, y, width, height);
@@ -29,6 +51,17 @@ public class NanoVG {
         nvgFill(Window.nvg);
     }
 
+    /**
+     * Renders an image from a file and returns the image handle.
+     *
+     * @param image  The filename of the image.
+     * @param x      The x-coordinate of the image's top-left corner.
+     * @param y      The y-coordinate of the image's top-left corner.
+     * @param width  The width of the image.
+     * @param height The height of the image.
+     * @return The image handle.
+     * @throws Exception If there is an error rendering the image.
+     */
     @SneakyThrows
     public static int renderImage(String image, float x, float y, float width, float height) {
         Path imagePath = Paths.get(Objects.requireNonNull(NanoVG.class.getResource(image)).toURI());
@@ -62,6 +95,11 @@ public class NanoVG {
         return imageHandle;
     }
 
+    /**
+     * Deletes an image from memory.
+     *
+     * @param imageHandle The image handle.
+     */
     public static void cleanUpImage(int imageHandle) {
         nvgDeleteImage(Window.nvg, imageHandle);
     }

@@ -17,12 +17,20 @@ import static org.lwjgl.nanovg.NanoVGGL3.nvgDelete;
 import static org.lwjgl.opengl.GL11.*;
 import static org.lwjgl.system.MemoryUtil.NULL;
 
+/**
+ * Cmd class represents the main entry point for the CMD game.
+ * It initializes the GLFW window, OpenGL context and NanoVG context.
+ * It also updates and renders the game state continuously until the window is closed.
+ */
 @Getter
 public class Cmd implements CmdClient {
 
     public Cmd() {
     }
 
+    /**
+     * Starts the game loop.
+     */
     public void start() {
         initialize();
         while (!glfwWindowShouldClose(window)) {
@@ -34,6 +42,9 @@ public class Cmd implements CmdClient {
         cleanup();
     }
 
+    /**
+     * Initializes GLFW, creates the window, creates the OpenGL context and NanoVG context.
+     */
     public void initialize() {
         GLFWErrorCallback.createPrint(System.err).set();
 
@@ -76,6 +87,9 @@ public class Cmd implements CmdClient {
         CmdCore.getInstance().initialize();
     }
 
+    /**
+     * Clears the screen, begins the NanoVG frame, renders the game frame and ends the NanoVG frame.
+     */
     public void renderFrame() {
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
         glClearColor(0.2f, 0.2f, 0.2f, 0.2f);
@@ -84,18 +98,24 @@ public class Cmd implements CmdClient {
         nvgEndFrame(nvg);
     }
 
+    /**
+     * Updates the game state by calling the updateGameState() method from the CmdCore singleton instance.
+     * This method is called once per frame in the main game loop.
+     */
     public void updateGameState() {
         CmdCore.getInstance().updateGameState();
     }
 
+    /**
+     * Cleans up resources used by the game, including the GLFW window and NanoVG context, by calling the cleanup()
+     * This method is called when the game is exiting.
+     */
     public void cleanup() {
         CmdCore.getInstance().cleanup();
 
-        if (window != NULL)
-            glfwDestroyWindow(window);
+        if (window != NULL) glfwDestroyWindow(window);
 
-        if (nvg != NULL)
-            nvgDelete(nvg);
+        if (nvg != NULL) nvgDelete(nvg);
 
         glfwTerminate();
     }

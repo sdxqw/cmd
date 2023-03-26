@@ -4,6 +4,9 @@ import io.github.sdxqw.cmd.client.Window;
 import io.github.sdxqw.cmd.font.FontManager;
 import org.lwjgl.glfw.GLFW;
 
+/**
+ * Represents a clickable button on a UI screen.
+ */
 public class Button {
 
     protected final float x;
@@ -15,6 +18,17 @@ public class Button {
 
     protected boolean hovered = false;
 
+
+    /**
+     * Constructor for the Button class.
+     *
+     * @param x         The x position of the button on the screen.
+     * @param y         The y position of the button on the screen.
+     * @param width     The width of the button.
+     * @param height    The height of the button.
+     * @param label     The text label to display on the button.
+     * @param onClick   The action to perform when the button is clicked.
+     */
     public Button(float x, float y, float width, float height, String label, Runnable onClick) {
         this.x = x;
         this.y = y;
@@ -24,6 +38,9 @@ public class Button {
         this.onClick = onClick;
     }
 
+    /**
+     * Renders the button on the screen.
+     */
     public void render() {
         float fontHeight = 20.0f; // Change as needed
         float labelWidth = FontManager.measureTextWidth(label, FontManager.ROBOTO, fontHeight);
@@ -34,6 +51,11 @@ public class Button {
         FontManager.drawRobotoText(label, labelX, labelY, fontHeight, NanoVG.color(1.0f, 1.0f, 1.0f, 1.0f));
     }
 
+    /**
+     * Handles input for the button.
+     *
+     * @param window    The GLFW window to get input from.
+     */
     public void handleInput(long window) {
         double[] mouseX = new double[1];
         double[] mouseY = new double[1];
