@@ -2,11 +2,14 @@ package io.github.sdxqw.cmd.core;
 
 import io.github.sdxqw.cmd.client.CmdClient;
 import io.github.sdxqw.cmd.client.Window;
+import io.github.sdxqw.cmd.core.commands.Clear;
+import io.github.sdxqw.cmd.core.commands.Echo;
 import io.github.sdxqw.cmd.font.FontManager;
 import io.github.sdxqw.cmd.ui.Button;
 import io.github.sdxqw.cmd.ui.ButtonImage;
+import io.github.sdxqw.cmd.ui.TextBox;
+import io.github.sdxqw.cmd.ui.TextInput;
 import io.github.sdxqw.cmd.utils.NanoVG;
-import io.github.sdxqw.logger.Logger;
 import lombok.Getter;
 
 import java.util.ArrayList;
@@ -24,9 +27,16 @@ public class CmdCore implements CmdClient {
     private final List<Button> buttons;
     private final FPSCounter fps;
 
+    private final TextInput field;
+    private final CmdTypes types;
+    private final TextBox textBox;
+
     private CmdCore() {
         fps = new FPSCounter();
         buttons = new ArrayList<>();
+        field = new TextInput(400, 200, 320, 60, 20);
+        types = new CmdTypes(new Echo(), new Clear());
+        textBox = new TextBox(field.commandHistory, 400, 240, 320, 120);
     }
 
     /**
@@ -47,8 +57,8 @@ public class CmdCore implements CmdClient {
             else e.render();
         });
 
-
-        Logger.info(FontManager.getTextHeight("roboto"));
+        field.render();
+        textBox.render();
 
         FontManager.drawRobotoText("FPS: " + fps.getFPS(), 30, 30, 20, NanoVG.color(1.0f, 1.0f, 1.0f, 1.0f));
     }
@@ -62,6 +72,9 @@ public class CmdCore implements CmdClient {
             if (e instanceof ButtonImage) e.handleInput(Window.window);
             else e.handleInput(Window.window);
         });
+
+        field.registerCallbacks(Window.window);
+        field.runCommands(types.getCmd(), field.getLastText());
     }
 
     /**

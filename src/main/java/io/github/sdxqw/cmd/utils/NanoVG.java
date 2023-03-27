@@ -59,6 +59,25 @@ public class NanoVG {
     }
 
     /**
+     * Draws a line between the points (x1, y1) and (x2, y2) with the given color and thickness.
+     *
+     * @param x1        the x-coordinate of the starting point of the line
+     * @param y1        the y-coordinate of the starting point of the line
+     * @param x2        the x-coordinate of the ending point of the line
+     * @param y2        the y-coordinate of the ending point of the line
+     * @param thickness the thickness of the line
+     * @param color     the color of the line
+     */
+    public static void drawLine(float x1, float y1, float x2, float y2, float thickness, NVGColor color) {
+        nvgBeginPath(Window.nvg);
+        nvgMoveTo(Window.nvg, x1, y1);
+        nvgLineTo(Window.nvg, x2, y2);
+        nvgStrokeColor(Window.nvg, color);
+        nvgStrokeWidth(Window.nvg, thickness);
+        nvgStroke(Window.nvg);
+    }
+
+    /**
      * Draws the border of a rounded rectangle with the specified position, size, color, radius, and thickness.
      *
      * @param x        The x-coordinate of the rectangle's top-left corner.
