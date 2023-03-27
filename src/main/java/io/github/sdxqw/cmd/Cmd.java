@@ -62,6 +62,7 @@ public class Cmd implements CmdClient {
         }
 
         GLFWVidMode videoMode = glfwGetVideoMode(glfwGetPrimaryMonitor());
+        assert videoMode != null;
         glfwSetWindowPos(window, (videoMode.width() - width) / 2, (videoMode.height() - height) / 2);
 
         glfwMakeContextCurrent(window);
